@@ -36,8 +36,11 @@ export class Atom {
 
     makeRings() {
         for (let i = 0; i < this.ringCount; i++) {
+            let red = Math.random();
+            let green = Math.random();
+            let blue = Math.random();
             const torus1Geo = new THREE.TorusGeometry( 2, .1, 4, 10 );
-            const torus1Mat = new THREE.MeshStandardMaterial( { color:0xff00ff } );
+            const torus1Mat = new THREE.MeshStandardMaterial( { color:new THREE.Color().setRGB( red, green, blue ) } );
             const torus1 = new THREE.Mesh(torus1Geo, torus1Mat);
             this.icosahedron.add(torus1);
             this.rings.push(torus1);
