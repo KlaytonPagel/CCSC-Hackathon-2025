@@ -1,22 +1,39 @@
 import * as THREE from 'three';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-const renderer = new THREE.WebGLRenderer();
+// -------------------------------------------------------- Setting up the renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+// -------------------------------------------------------- Setting up the Camera
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+camera.position.z = 2;
 
-camera.position.z = 5;
+// -------------------------------------------------------- Setting up the scene
+const scene = new THREE.Scene();
 
+// -------------------------------------------------------- Geometries
+
+const geo = new THREE.IcosahedronGeometry(1.0, 0);
+const mat = new THREE.MeshStandardMaterial({
+    color: 0xffffff
+});
+const mesh = new THREE.Mesh(geo, mat);
+scene.add(mesh);
+
+// -------------------------------------------------------- Lights
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000);
+scene.add(hemiLight);
+
+
+// -------------------------------------------------------- Animation Loop
 function animate() {
+
+    mesh.rotation.x += .01;
+    mesh.rotation.y += .01;
+
     renderer.render( scene, camera );
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+
 }
-renderer.setAnimationLoop( animate );
