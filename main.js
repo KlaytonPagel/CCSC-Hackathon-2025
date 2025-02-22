@@ -25,7 +25,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const geo = new THREE.IcosahedronGeometry(1.0, 3);
 const mat = new THREE.MeshStandardMaterial({
     flatShading: true,
-    color: 0xffffff
+    color: 0x00ffff
 });
 const mesh = new THREE.Mesh(geo, mat);
 scene.add(mesh);
@@ -40,22 +40,43 @@ wireMesh.scale.setScalar(1.001);
 mesh.add(wireMesh);
 
 // ---------------- Torus Geometry --------------
-const torusGeo = new THREE.TorusGeometry( 3, .5, 10, 100 );
-const torusMat = new THREE.MeshStandardMaterial( { color:0xffffff } );
-const torus = new THREE.Mesh(torusGeo, torusMat);
-scene.add(torus);
+const torus1Geo = new THREE.TorusGeometry( 2, .1, 4, 10 );
+const torus1Mat = new THREE.MeshStandardMaterial( { color:0xff00ff } );
+const torus1 = new THREE.Mesh(torus1Geo, torus1Mat);
+scene.add(torus1);
 
+const torus2Geo = new THREE.TorusGeometry( 2, .1, 4, 10 );
+const torus2Mat = new THREE.MeshStandardMaterial( { color:0x00ff00 } );
+const torus2 = new THREE.Mesh(torus2Geo, torus2Mat);
+scene.add(torus2);
+
+const torus3Geo = new THREE.TorusGeometry( 2, .1, 4, 10 );
+const torus3Mat = new THREE.MeshStandardMaterial( { color:0x0000ff } );
+const torus3 = new THREE.Mesh(torus3Geo, torus3Mat);
+scene.add(torus3);
+
+const torus4Geo = new THREE.TorusGeometry( 2, .1, 4, 10 );
+const torus4Mat = new THREE.MeshStandardMaterial( { color:0xff0000 } );
+const torus4 = new THREE.Mesh(torus4Geo, torus4Mat);
+scene.add(torus4);
 
 // -------------------------------------------------------- Lights
-const hemiLight = new THREE.HemisphereLight(0xff0000, 0x0000ff);
-scene.add(hemiLight);
-
+const icoLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
+mesh.add(icoLight);
 
 // -------------------------------------------------------- Animation Loop
 function animate() {
 
     mesh.rotation.x += .005;
     mesh.rotation.y += .005;
+    torus1.rotation.y -= .01;
+    torus1.rotation.x -= .01;
+    torus2.rotation.y -= .02;
+    torus2.rotation.x -= .02;
+    torus3.rotation.y -= .03;
+    torus3.rotation.x -= .03;
+    torus4.rotation.y -= .04;
+    torus4.rotation.x -= .04;
 
     renderer.render( scene, camera );
 
