@@ -1,9 +1,9 @@
 const Solar = () => {
 
     return (
-        <div>
+        <h1>
             Solar System Page
-        </div>
+        </h1>
     )
 }
 export default Solar;
