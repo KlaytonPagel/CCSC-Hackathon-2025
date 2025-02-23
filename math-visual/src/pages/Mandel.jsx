@@ -135,10 +135,7 @@ const Mandel = () => {
         return () => {
             gui.destroy();
             window.removeEventListener('resize', handleResize);
-            //mountRef.current.removeChild(renderer.domElement);
             renderer.dispose();
-            //geometry.dispose();
-            //material.dispose();
         };
     }, []);
 
