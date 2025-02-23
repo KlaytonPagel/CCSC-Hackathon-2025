@@ -14,84 +14,95 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 //Camera controls
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls( camera, renderer.domElement );
 
-//Quaternion Rotation
+//Quaternion and quaternion rotation axes
 const quat = new THREE.Quaternion();
 const quatData = {
     vx: 0,
     vy: 0,
     vz: 0,
-    w: 0
+    w: 1
+} //An unit quaternion should be x^2+y^2+z^2+w^2=1
+
+function updateQuatData(){
+    //Quaternion should stay as an unit quaternion to be applied for rotation.
+    quat.set(quatData.vx, quatData.vy, quatData.vz, quatData.w).normalize();
+    sph.setRotationFromQuaternion(quat); // Apply the quaternion to the sphere
+
+    const radius = 2.3;
+    const rotatedPoint = new THREE.Vector3(radius, 0, 0); // a specific point on x axis.
+    rotatedPoint.applyQuaternion(quat); // apply current quaternion on the point to rotate it.
+    rotatedPoint.add(sph.position); //convert coordinates considering the position of the sphere.
+    
+    points.push(rotatedPoint.clone());
+    if (points.length > 100) points.shift(); //limit the length of trajectory
+
+    updateTrajectory();
 }
 
 //gui cp
 const gui = new GUI();
-let state = {
-  name: "Quaternion",
-  shadow: true,
-};
-
-function updateQuatData(){
-    quat.setFromEuler(new THREE.Euler(quatData.vx, quatData.vy, quatData.vz));
-    cube1.setRotationFromQuaternion(quat); // Apply the quaternion to the cube
+gui.title("Quaternion Controls");
+const QuatParam = gui.addFolder("Parameters");
+const param = [];
+function resetQuaternion() {
+    quatData.vx = 0;
+    quatData.vy = 0;
+    quatData.vz = 0;
+    quatData.w = 1;
+    points = [];
+    updateQuatData();
+    param.forEach(control => control.updateDisplay());
 }
+param.push(QuatParam.add(quatData, "vx", -1, 1, 0.01).onChange(updateQuatData));
+param.push(QuatParam.add(quatData, "vy", -1, 1, 0.01).onChange(updateQuatData));
+param.push(QuatParam.add(quatData, "vz", -1, 1, 0.01).onChange(updateQuatData));
+param.push(QuatParam.add(quatData, "w", -1, 1, 0.01).onChange(updateQuatData));
+QuatParam.add({ reset: resetQuaternion }, "reset").name("Reset Quaternion");
 
-gui.add(state, "name");
-const QuatParam = gui.addFolder("Quaternion Parameters");
-QuatParam.add(quatData, "vx", -(Math.PI), Math.PI).onChange(updateQuatData);
-QuatParam.add(quatData, "vy", -(Math.PI), Math.PI).onChange(updateQuatData);
-QuatParam.add(quatData, "vx", -(Math.PI), Math.PI).onChange(updateQuatData);
-gui.add(state, "shadow").onChange(function(){
-  model.traverse((object) => {
-    if (object.isMesh) {
-      const map =
-        object.material && object.material.map ? object.material.map : null;
-      const material = new THREE.MeshStandardMaterial();
-      material.map = map;
-      object.material = material;
-      material.castShadow = state.shadow;
-      object.castShadow = state.shadow;
+//Rotation Trajectory
+//Line
+function updateTrajectory() {
+    //generate new Buffer geometry
+    const trajectoryGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(points.flatMap(p => [p.x, p.y, p.z]));
+    trajectoryGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    
+    //remove previous lines for memory
+    if (trajectoryLine.geometry) {
+        trajectoryLine.geometry.dispose();
     }
-  });
-});
+    
+    trajectoryLine.geometry = trajectoryGeometry;
+}
+const trajectoryMaterial = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 4 });
+const trajectoryLine = new THREE.Line(new THREE.BufferGeometry(), trajectoryMaterial);
+scene.add(trajectoryLine);
+// const trajectoryGeometry = new THREE.BufferGeometry();  
+// trajectoryGeometry.setFromPoints([new THREE.Vector3(0, 0, 0)]);
+// const trajectoryMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+// const trajectoryLine = new THREE.Line(trajectoryGeometry, trajectoryMaterial);
+// scene.add(trajectoryLine);
+//Array for Trajectory
+let points = [];
 
 //Making a grid plane
 const gridp = new THREE.GridHelper(10, 10);
 scene.add(gridp);
 
 //Making axes (x: red, y: green, z: blue)
-const axes = new THREE.AxesHelper(5);
+const axes = new THREE.AxesHelper(6);
 scene.add(axes);
 
-//make a box
-const geometry1 = new THREE.BoxGeometry( 1, 2, 1 );
-const material1 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const materialwire1 = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } );
-const cube1 = new THREE.Mesh( geometry1, material1 );
-const cubewire1 = new THREE.Mesh( geometry1, materialwire1 );
-scene.add( cube1 );
-cube1.add( cubewire1 );
-
-//make a box - head
-const geometry2 = new THREE.BoxGeometry(1.5, 1.5, 1.5);
-const material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube2 = new THREE.Mesh( geometry2, material2 );
-cube1.add( cube2 );
-
-//make feets
-const foot1 = new THREE.BoxGeometry(0.4, 0.6, 0.4);
-const foot2 = new THREE.BoxGeometry(0.4, 0.6, 0.4);
-const foot3 = new THREE.BoxGeometry(0.4, 0.6, 0.4);
-const foot4 = new THREE.BoxGeometry(0.4, 0.6, 0.4);
-const material3 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const ft1 =  new THREE.Mesh( foot1, material3 );
-const ft2 =  new THREE.Mesh( foot2, material3 );
-const ft3 =  new THREE.Mesh( foot3, material3 );
-const ft4 =  new THREE.Mesh( foot4, material3 );
-const feet = new THREE.Group();
-feet.add( ft1, ft2, ft3, ft4 );
-cube1.add( feet );
+//A sphere
+const geo1 = new THREE.SphereGeometry( 2, 32, 32 );
+const mat1 = new THREE.MeshBasicMaterial( { color: 0xb77cef, transparent: true, opacity: 0.7 } );
+const wiremat = new THREE.MeshBasicMaterial( { color: 0x050505, wireframe: true } );
+const sph = new THREE.Mesh( geo1, mat1 );
+const sphwir = new THREE.Mesh( geo1, wiremat );
+scene.add( sph );
+sph.add( sphwir );
 
 camera.position.set( 4, 3, 4 );
 controls.update();
@@ -99,18 +110,6 @@ controls.update();
 function animate() {
     controls.update();
     renderer.render( scene, camera );
-    //cube2.translateY( 0.01 );
-    cube2.position.y = 1;
-    ft1.position.set(0.6, 0, 0.3);
-    ft2.position.set(0.6, 0, -0.3);
-    ft3.position.set(-0.6, 0, 0.3);
-    ft4.position.set(-0.6, 0, -0.3);
-
-    feet.position.y = -1;
-
-
-    //cube1.rotation.x += 0.01;
-    // cube1.rotation.y += 0.01;
-    // cube2.rotation.y += 0.01;
+    
 }
 renderer.setAnimationLoop( animate );
