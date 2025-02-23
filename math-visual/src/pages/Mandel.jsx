@@ -136,6 +136,7 @@ const Mandel = () => {
             gui.destroy();
             window.removeEventListener('resize', handleResize);
             renderer.dispose();
+            //geometry.dispose();
         };
     }, []);
 

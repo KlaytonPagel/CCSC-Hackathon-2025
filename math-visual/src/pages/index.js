@@ -4,4 +4,3 @@ import Quaternions from './Quaternions';
 import Solar from './Solar';
 export { Mandel, Home, Quaternions, Solar };
 
-
