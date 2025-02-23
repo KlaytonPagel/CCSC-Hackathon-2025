@@ -88,9 +88,9 @@ earthMesh.scale.set(1,1,1);
 earthOrbit.add(earthMesh);
 
 
-
+//moon
 const moonOrbit = new THREE.Object3D();
-moonOrbit.position.set(3,0,0);
+moonOrbit.position.set(2,0,0);
 earthOrbit.add(moonOrbit);
 
 const moonMaterial = new THREE.MeshPhongMaterial({
@@ -99,7 +99,7 @@ const moonMaterial = new THREE.MeshPhongMaterial({
 });
 
 const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
-moonMesh.scale.set(0.05, 0.05, 0.05);
+moonMesh.scale.set(0.3, 0.3, 0.3);
 moonOrbit.add(moonMesh);
 
 
@@ -195,48 +195,45 @@ function animate() {
 
     const time = Date.now() * 0.0001;
 
-    const xMercury = 4 * Math.cos(time) + 0.8;
-    const zMercury = 3.9 * Math.sin(time);
+    const xMercury = 4 * Math.cos(time + 1) + 0.8;
+    const zMercury = 3.9 * Math.sin(time+ 1);
     mercuryOrbit.position.set(xMercury,0,zMercury);
     mercuryMesh.rotation.y += 0.01; 
 
-    const xVenus = 7 * Math.cos(time) + 0.049;
-    const zVenus = 6.8 * Math.sin(time);
+    const xVenus = 7 * Math.cos(time+2) + 0.049;
+    const zVenus = 6.8 * Math.sin(time+2);
     venusOrbit.position.set(xVenus,0,zVenus);
     venusMesh.rotation.y += 0.005;
 
-    const xEarth = 10* Math.cos(time) + 0.16;  
-    const zEarth = 9.9* Math.sin(time);  
+    const xEarth = 10* Math.cos(time+3) + 0.16;  
+    const zEarth = 9.9* Math.sin(time+3);  
     earthOrbit.position.set(xEarth, 0, zEarth);  
     earthMesh.rotation.y += 0.02;
 
-    const xMoon = 3 * Math.cos(time); 
-    const zMoon = 3 * Math.sin(time);  
-    moonOrbit.position.set(xMoon, 0, zMoon); 
     moonMesh.rotation.y += 0.05;
 
-    const xMars = 15* Math.cos(time) +1.395;  
-    const zMars = 14.9* Math.sin(time);  
+    const xMars = 15* Math.cos(time+4) +1.395;  
+    const zMars = 14.9* Math.sin(time+4);  
     marsOrbit.position.set(xMars, 0, zMars);  
     marsMesh.rotation.y += 0.01;
 
-    const xJupiter = 53* Math.cos(time) +2.544;  
-    const zJupiter = 52* Math.sin(time);  
+    const xJupiter = 53* Math.cos(time+5) +2.544;  
+    const zJupiter = 52* Math.sin(time+5);  
     jupiterOrbit.position.set(xJupiter, 0, zJupiter);
     jupiterMesh.rotation.y += 0.001;
 
-    const xSaturn = 100* Math.cos(time) +5.4;  
-    const zSaturn = 99.8* Math.sin(time);  
+    const xSaturn = 100* Math.cos(time+6) +5.4;  
+    const zSaturn = 99.8* Math.sin(time+6);  
     saturnOrbit.position.set(xSaturn, 0, zSaturn);
     saturnMesh.rotation.y += 0.002;
 
-    const xUranus = 200* Math.cos(time) +8.93;  
-    const zUranus = 199.7* Math.sin(time);  
+    const xUranus = 200* Math.cos(time+7) +8.93;  
+    const zUranus = 199.7* Math.sin(time+7);  
     uranusOrbit.position.set(xUranus, 0, zUranus);
     uranusMesh.rotation.y += 0.003;
 
-    const xNeptune = 300* Math.cos(time) +2.4;  
-    const zNeptune = 299.9* Math.sin(time);  
+    const xNeptune = 300* Math.cos(time+8) +2.4;  
+    const zNeptune = 299.9* Math.sin(time+8);  
     neptuneOrbit.position.set(xNeptune, 0, zNeptune);
     neptuneMesh.rotation.y += 0.004;
 
