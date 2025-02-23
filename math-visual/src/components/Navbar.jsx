@@ -3,18 +3,18 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
     return (
         <header>
-            <NavLink to="/">
-                <p>KP</p>
-            </NavLink>
             <nav>
+                <NavLink to="/"> 
+                    Home
+                </NavLink>
                 <NavLink to="/mandel"> 
                     MandelBulb
                 </NavLink>
-                <NavLink to="/projects"> 
-                    Projects
+                <NavLink to="/quaternions"> 
+                    Quaternions
                 </NavLink>
-                <NavLink to="/contact"> 
-                    Contact
+                <NavLink to="/solarsystem"> 
+                    Solar System
                 </NavLink>
             </nav>
         </header>

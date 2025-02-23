@@ -1,12 +1,9 @@
-import { Canvas } from '@react-three/fiber'
-
 const Home = () => {
-    return (
-        <section>
-            <Canvas>
 
-            </Canvas>
-        </section>
+    return (
+        <div>
+            Home Page
+        </div>
     )
 }
 export default Home;
