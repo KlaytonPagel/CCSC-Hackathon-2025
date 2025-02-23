@@ -72,7 +72,7 @@ const venusMesh = new THREE.Mesh(sphereGeometry, venusMaterial);
 venusMesh.scale.set(0.9,0.9,0.9);
 venusOrbit.add(venusMesh);
 
-
+//
 //earthOrbit
 const earthOrbit = new THREE.Object3D();
 earthOrbit.position.set(0.16,0,0);
