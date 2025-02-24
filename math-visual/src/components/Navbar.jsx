@@ -10,8 +10,6 @@ const Navbar = () => {
         }}> 
         <NavLink to="/" style={{
             padding: "8px",
-                background: "grey",
-                borderRadius: "10px",
         }}> 
         Home   
         </NavLink>
@@ -29,6 +27,11 @@ const Navbar = () => {
             padding: "8px",
         }}> 
         Solar System
+        </NavLink>
+        <NavLink to="/atoms"style={{
+            padding: "8px",
+        }}> 
+        Atoms
         </NavLink>
         </nav>
         </header>
